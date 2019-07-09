@@ -2,8 +2,7 @@
 
 window.kindleCloudDownloader = window.kindleCloudDownloader || {};
 
-// TEST
-let sql = `
+window.kindleCloudDownloader.QUERY = `
    SELECT
       B.metadata,
       R.piece
@@ -12,12 +11,15 @@ let sql = `
       JOIN resources R ON R.asin = B.asin
 `;
 
+window.kindleCloudDownloader.DB_NAME = 'K4Wbooks';
+window.kindleCloudDownloader.DB_VERSION = '7';
+
 function fetchDataURLs() {
     return new Promise(function(resolve, reject) {
-        let db = openDatabase('K4Wbooks', '7', 'K4Wbooks', 0);
+        let db = openDatabase(window.kindleCloudDownloader.DB_NAME, window.kindleCloudDownloader.DB_VERSION, window.kindleCloudDownloader.DB_NAME, 0);
 
         db.transaction(function(tx) {
-            tx.executeSql(sql, [], function(tx, results) {
+            tx.executeSql(window.kindleCloudDownloader.QUERY, [], function(tx, results) {
                 // {title: [url, ...], ...}
                 let urls = {};
 
@@ -78,6 +80,8 @@ function downloadBook(callback) {
         }
 
         for (let title in urls) {
+            console.log(`Preparing "${title} for download.`);
+
             let archive = createZip(title, urls[title]);
             archive.generateAsync({type:"blob"}).then(function(blob) {
                 saveAs(blob, `${title}.zip`);
