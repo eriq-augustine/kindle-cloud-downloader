@@ -9,6 +9,7 @@ window.kindleCloudDownloader.QUERY = `
    FROM
       bookinfo B
       JOIN resources R ON R.asin = B.asin
+   ORDER BY R.id
 `;
 
 window.kindleCloudDownloader.DB_NAME = 'K4Wbooks';
@@ -80,7 +81,7 @@ function downloadBook(callback) {
         }
 
         for (let title in urls) {
-            console.log(`Preparing "${title} for download.`);
+            console.log(`Preparing "${title}" for download.`);
 
             let archive = createZip(title, urls[title]);
             archive.generateAsync({type:"blob"}).then(function(blob) {
