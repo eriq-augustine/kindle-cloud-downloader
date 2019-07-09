@@ -1,0 +1,26 @@
+{
+    "name": "Kindle Cloud Downloader",
+    "version": "1.0",
+    "description": "Download your pinned/offline ebooks from Amazon's online Kindle reader.",
+    "permissions": [
+        "downloads",
+        "tabs"
+    ],
+    "browser_action": {},
+    "background": {
+        "scripts": [
+            "js/background.js"
+        ],
+        "persistent": false
+    },
+    "content_scripts": [{
+        "matches": ["https://read.amazon.com/*"],
+        "js": [
+            "vendor/FileSaver/FileSaver.min.js",
+            "vendor/jszip/jszip.min.js",
+            "js/kindle-cloud-downloader.js"
+        ],
+        "run_at": "document_idle"
+    }],
+    "manifest_version": 2
+}
